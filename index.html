@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bem-vindo ao Lex.AO | Direito Angolano: Acesso Fácil e Gratuito com o LEX.AO</title>
+  <meta name="description" content="Tenha acesso fácil e gratuito ao Direito Angolano com a plataforma Lex Angola. Informações jurídicas claras e atualizadas para empresários, advogados e cidadãos.">
+  <link rel="icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* === RESET & BASE === */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* === NAVBAR === */
+    .navbar {
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .navbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+    }
+    .navbar__brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #6C0E26;
+      text-decoration: none;
+    }
+    .navbar__brand i { font-size: 28px; color: #6C0E26; }
+    .navbar__toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+    }
+    .navbar__items {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+    .navbar__link {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      padding: 8px 0;
+      transition: 0.3s;
+    }
+    .navbar__link:hover {
+      color: #6C0E26;
+      border-bottom: 2px solid #6C0E26;
+    }
+
+    /* === MOBILE MENU === */
+    .navbar__sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 250px;
+      height: 100vh;
+      background: #fff;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      transition: left 0.3s ease;
+      z-index: 2000;
+      padding: 80px 20px 20px;
+    }
+    .navbar__sidebar.active {
+      left: 0;
+    }
+    .navbar__sidebar ul {
+      list-style: none;
+    }
+    .navbar__sidebar li {
+      margin-bottom: 20px;
+    }
+    .navbar__sidebar a {
+      display: block;
+      color: #333;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .navbar__sidebar a:hover {
+      background: #f1f1f1;
+      color: #6C0E26;
+    }
+    .navbar__backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1500;
+    }
+    .navbar__backdrop.active {
+      display: block;
+    }
+
+    /* === SEARCH BUTTON === */
+    .DocSearch-Button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #666;
+    }
+    .DocSearch-Search-Icon {
+      width: 18px;
+      height: 18px;
+      fill: #666;
+    }
+
+    /* === HERO === */
+    .hero {
+      background: #581324;
+      color: white;
+      padding: 140px 20px 100px;
+      text-align: center;
+      margin-top: 80px;
+    }
+    .hero__title {
+      font-size: 52px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .hero__subtitle {
+      font-size: 20px;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+    .buttons_AeoN {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .button {
+      padding: 12px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .button--secondary {
+      background: #6C0E26;
+      color: white;
+    }
+    .button--outline {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+    }
+    .button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* === FEATURES === */
+    .features_u5hX {
+      padding: 60px 20px;
+    }
+    .sectionTitle_XUV2 {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 16px;
+      color: #6C0E26;
+    }
+    .sectionSubtitle_D0um {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #666;
+      font-size: 16px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .featureCard_ZnNi {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 28px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .featureCard_ZnNi:hover {
+      transform: translateY(-6px);
+    }
+    .cardHeader_RMOj {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .icon_tEc3 {
+      font-size: 28px;
+    }
+    .stats_dUE0 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #6C0E26;
+    }
+    .cardTitle_CGCs {
+      font-size: 18px;
+      color: #6C0E26;
+      margin-bottom: 12px;
+    }
+    .cardDescription_yMaC {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+    .actionText_nTVs {
+      color: #6C0E26;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .arrow_Meiy {
+      margin-left: 6px;
+      font-weight: bold;
+    }
+
+    /* === STATS === */
+    .stats_mkeM {
+      padding: 60px 20px;
+      background: #fff;
+    }
+    .statItem_wck3 {
+      text-align: center;
+    }
+    .statNumber_hOFA {
+      font-size: 36px;
+      font-weight: 700;
+      color: #6C0E26;
+      margin-bottom: 8px;
+    }
+    .statLabel_pnPR {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+    .statDescription_vGRm {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* === RECENT UPDATES === */
+    .recent_irBX {
+      padding: 60px 20px;
+    }
+    .sectionHeader_o9O_ {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .sectionTitle_ttXv {
+      font-size: 32px;
+      margin-bottom: 16px;
+      color: #6C0E26;
+    }
+    .sectionSubtitle_X_Qm {
+      color: #666;
+      font-size: 16px;
+    }
+    .list_zzaF {
+      list-style: none;
+      max-width: 800px;
+      margin: 0 auto 40px;
+    }
+    .item_zlT6 {
+      border-bottom: 1px solid #eee;
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .itemLink_Bm2q {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+    .itemContent_DfyH {
+      flex: 1;
+    }
+    .itemHeader_WsyH {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+    .itemTitle_WMC3 {
+      font-size: 18px;
+      color: #333;
+      margin: 0 0 8px;
+    }
+    .itemCategory_KN2U {
+      font-size: 14px;
+      color: #6C0E26;
+      font-weight: 500;
+    }
+    .itemArrow_H2zG {
+      font-size: 18px;
+      color: #6C0E26;
+      font-weight: bold;
+    }
+    .viewMoreWrapper_sdR_ {
+      text-align: center;
+    }
+    .viewMoreButton_UGsG {
+      color: #6C0E26;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 15px;
+    }
+    .buttonArrow_tjVx {
+      margin-left: 8px;
+    }
+
+    /* === IA BOT === */
+    .ia-bot {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #6C0E26;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(108, 14, 38, 0.3);
+      z-index: 1000;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+    .ia-bot:hover {
+      background: #581324;
+      transform: scale(1.05);
+    }
+
+    /* === FOOTER === */
+    .footer {
+      background: #581324;
+      color: white;
+      padding: 60px 30px 30px;
+      margin-top: 80px;
+    }
+    .footer__links {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto 40px;
+    }
+    .footer__col {
+      min-width: 200px;
+    }
+    .footer__title {
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #ffcccc;
+    }
+    .footer__items {
+      list-style: none;
+    }
+    .footer__link-item {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      margin-bottom: 12px;
+      transition: 0.2s;
+    }
+    .footer__link-item:hover {
+      color: #ffcccc;
+      text-decoration: underline;
+    }
+    .footer__bottom {
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+      padding-top: 20px;
+      border-top: 1px solid #6a1a2e;
+    }
+
+    /* === RESPONSIVO === */
+    @media (max-width: 768px) {
+      .navbar__toggle { display: block; }
+      .navbar__items { display: none; }
+      .navbar__inner { padding: 15px 20px; }
+      .hero { padding: 120px 20px 80px; }
+      .hero__title { font-size: 36px; }
+      .hero__subtitle { font-size: 18px; }
+      .buttons_AeoN { flex-direction: column; align-items: center; gap: 15px; }
+      .row { grid-template-columns: 1fr; gap: 20px; }
+      .featureCard_ZnNi { padding: 24px; }
+      .features_u5hX, .stats_mkeM, .recent_irBX { padding: 40px 20px; }
+      .sectionTitle_XUV2, .sectionTitle_ttXv { font-size: 24px; }
+      .list_zzaF { max-width: 100%; }
+      .item_zlT6 { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .itemLink_Bm2q { flex-direction: column; align-items: flex-start; }
+      .itemArrow_H2zG { align-self: flex-end; margin-top: 10px; }
+      .footer__links { flex-direction: column; gap: 30px; text-align: center; }
+      .ia-bot { width: 55px; height: 55px; font-size: 20px; bottom: 15px; right: 15px; }
+    }
+    @media (max-width: 480px) {
+      .hero__title { font-size: 28px; }
+      .hero { padding: 100px 15px 60px; }
+      .container { padding: 0 15px; }
+      .featureCard_ZnNi { padding: 20px; }
+      .statNumber_hOFA { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav aria-label="Navegação principal" class="navbar">
+    <div class="navbar__inner container">
+      <a class="navbar__brand" href="/">
+        <i class="fa-solid fa-scale-balanced"></i> Lex.AO
+      </a>
+      <button class="navbar__toggle" aria-label="Alternar menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="navbar__items">
+        <li><a class="navbar__link" href="/docs/intro">Diplomas</a></li>
+        <li><a class="navbar__link" href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer">IA Jurídica ✨</a></li>
+      </ul>
+      <div class="navbarSearchContainer_Bca1">
+        <button type="button" class="DocSearch DocSearch-Button" aria-label="Buscar">
+          <span class="DocSearch-Button-Container">
+            <svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"/>
+              <path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="DocSearch-Button-Placeholder">Buscar</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <!-- MOBILE SIDEBAR -->
+    <div class="navbar__sidebar" id="navbarSidebar">
+      <ul>
+        <li><a href="/docs/intro">Diplomas</a></li>
+        <li><a href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer">IA Jurídica</a></li>
+        <li><a href="/search">Pesquisar Leis</a></li>
+        <li><a href="/docs/category/assembleia-nacional">Assembleia Nacional</a></li>
+      </ul>
+    </div>
+    <div class="navbar__backdrop" id="navbarBackdrop"></div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero hero--primary heroBanner_qdFl">
+    <div class="container">
+      <h1 class="hero__title">Direito Angolano: Acesso Fácil e Gratuito com o LEX.AO</h1>
+      <p class="hero__subtitle">
+        Tenha acesso fácil e gratuito ao Direito Angolano com a plataforma Lex Angola. 
+        Informações jurídicas claras e atualizadas para empresários, advogados e cidadãos.
+      </p>
+      <div class="buttons_AeoN">
+        <a class="button button--secondary button--lg" href="/docs/intro">Explorar 🧭</a>
+        <a class="button button--outline button--lg" href="/search">Pesquisar Leis 🔎</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- FEATURES (CARDS ESTILIZADOS) -->
+  <section class="features_u5hX" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="featuresHeader_OstB">
+        <h2 class="sectionTitle_XUV2" id="features-heading">Como podemos ajudar?<a href="#features-heading" class="hash-link" aria-label="Link direto para Como podemos ajudar?" title="Link direto para Como podemos ajudar?"></a></h2>
+        <p class="sectionSubtitle_D0um">Explore o direito angolano de forma simples e eficiente</p>
+      </div>
+      <div class="row">
+        <div class="col col--6 col--lg-3">
+          <a class="card featureCard_ZnNi featureCard--primary_AAZj" href="/docs/intro">
+            <div class="cardHeader_RMOj">
+              <div class="iconWrapper_D827"><span class="icon_tEc3" aria-hidden="true">📚</span></div>
+              <span class="stats_dUE0">1000+ Diplomas</span>
+            </div>
+            <div class="card__body">
+              <h3 class="cardTitle_CGCs">Explorar Diplomas</h3>
+              <p class="cardDescription_yMaC">Navegue pelo acervo completo de diplomas legais angolanos organizados por categoria e entidade emitente.</p>
+            </div>
+            <div class="cardFooter_cugb">
+              <span class="actionText_nTVs">Explorar<span class="arrow_Meiy">→</span></span>
+            </div>
+          </a>
+        </div>
+        <div class="col col--6 col--lg-3">
+          <a class="card featureCard_ZnNi featureCard--info_zkAF" href="/search">
+            <div class="cardHeader_RMOj">
+              <div class="iconWrapper_D827"><span class="icon_tEc3" aria-hidden="true">🔍</span></div>
+              <span class="stats_dUE0">Pesquisa Instantânea</span>
+            </div>
+            <div class="card__body">
+              <h3 class="cardTitle_CGCs">Pesquisa Inteligente</h3>
+              <p class="cardDescription_yMaC">Encontre rapidamente qualquer diploma através da nossa ferramenta de pesquisa avançada com filtros por data, entidade e palavra-chave.</p>
+            </div>
+            <div class="cardFooter_cugb">
+              <span class="actionText_nTVs">Explorar<span class="arrow_Meiy">→</span></span>
+            </div>
+          </a>
+        </div>
+        <div class="col col--6 col--lg-3">
+          <a href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer" class="card featureCard_ZnNi featureCard--success_YS2d">
+            <div class="cardHeader_RMOj">
+              <div class="iconWrapper_D827"><span class="icon_tEc3" aria-hidden="true">🤖</span></div>
+              <span class="stats_dUE0">24/7 Disponível</span>
+            </div>
+            <div class="card__body">
+              <h3 class="cardTitle_CGCs">IA Jurídica</h3>
+              <p class="cardDescription_yMaC">Obtenha esclarecimentos e análises jurídicas especializadas através da nossa assistente de inteligência artificial.</p>
+            </div>
+            <div class="cardFooter_cugb">
+              <span class="actionText_nTVs">Abrir ferramenta<span class="arrow_Meiy">→</span></span>
+            </div>
+          </a>
+        </div>
+        <div class="col col--6 col--lg-3">
+          <a class="card featureCard_ZnNi featureCard--warning_x1jV" href="/docs/category/assembleia-nacional">
+            <div class="cardHeader_RMOj">
+              <div class="iconWrapper_D827"><span class="icon_tEc3" aria-hidden="true">🏛</span></div>
+              <span class="stats_dUE0">20+ Entidades</span>
+            </div>
+            <div class="card__body">
+              <h3 class="cardTitle_CGCs">Organizações</h3>
+              <p class="cardDescription_yMaC">Acesse os diplomas agrupados por entidade emitente: Assembleia Nacional, Presidente da República, Conselho de Ministros e mais.</p>
+            </div>
+            <div class="cardFooter_cugb">
+              <span class="actionText_nTVs">Explorar<span class="arrow_Meiy">→</span></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats_mkeM" aria-labelledby="stats-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col col--3">
+          <div class="statItem_wck3">
+            <div class="statNumber_hOFA">1000+</div>
+            <div class="statLabel_pnPR">Diplomas Legais</div>
+            <div class="statDescription_vGRm">Acervo completo de legislação angolana</div>
+          </div>
+        </div>
+        <div class="col col--3">
+          <div class="statItem_wck3">
+            <div class="statNumber_hOFA">20+</div>
+            <div class="statLabel_pnPR">Entidades</div>
+            <div class="statDescription_vGRm">Órgãos e instituições emitentes</div>
+          </div>
+        </div>
+        <div class="col col--3">
+          <div class="statItem_wck3">
+            <div class="statNumber_hOFA">100%</div>
+            <div class="statLabel_pnPR">Gratuito</div>
+            <div class="statDescription_vGRm">Acesso livre e sem custos</div>
+          </div>
+        </div>
+        <div class="col col--3">
+          <div class="statItem_wck3">
+            <div class="statNumber_hOFA">24/7</div>
+            <div class="statLabel_pnPR">Disponível</div>
+            <div class="statDescription_vGRm">Sempre acessível online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT UPDATES (ESTILIZADO PARA MOBILE) -->
+  <section class="recent_irBX" aria-labelledby="recent-updates-heading">
+    <div class="container">
+      <div class="sectionHeader_o9O_">
+        <h2 class="sectionTitle_ttXv" id="recent-updates-heading">Atualizações Recentes<a href="#recent-updates-heading" class="hash-link" aria-label="Link direto para Atualizações Recentes" title="Link direto para Atualizações Recentes"></a></h2>
+        <p class="sectionSubtitle_X_Qm">Mantenha-se informado com os diplomas legais mais recentemente publicados</p>
+      </div>
+      <ul class="list_zzaF">
+        <li class="item_zlT6">
+          <a class="itemLink_Bm2q" href="/docs/assembleia-nacional/2025/lei-n-o-9-25-de-16-de-setembro/">
+            <div class="itemContent_DfyH">
+              <div class="itemHeader_WsyH">
+                <span class="itemType__lfx">Lei</span>
+                <span class="itemDate__z6h">16 Set 2025</span>
+              </div>
+              <h3 class="itemTitle_WMC3">Lei n.º 9/25, de 16 de Setembro</h3>
+              <span class="itemCategory_KN2U">Assembleia Nacional</span>
+            </div>
+            <div class="itemArrow_H2zG">→</div>
+          </a>
+        </li>
+        <li class="item_zlT6">
+          <a class="itemLink_Bm2q" href="/docs/assembleia-nacional/2025/lei-n-o-8-25-de-16-de-setembro/">
+            <div class="itemContent_DfyH">
+              <div class="itemHeader_WsyH">
+                <span class="itemType__lfx">Lei</span>
+                <span class="itemDate__z6h">16 Set 2025</span>
+              </div>
+              <h3 class="itemTitle_WMC3">Lei n.º 8/25, de 16 de Setembro</h3>
+              <span class="itemCategory_KN2U">Assembleia Nacional</span>
+            </div>
+            <div class="itemArrow_H2zG">→</div>
+          </a>
+        </li>
+        <li class="item_zlT6">
+          <a class="itemLink_Bm2q" href="/docs/assembleia-nacional/2025/lei-n-o-7-25-de-24-de-julho/">
+            <div class="itemContent_DfyH">
+              <div class="itemHeader_WsyH">
+                <span class="itemType__lfx">Lei</span>
+                <span class="itemDate__z6h">24 Jul 2025</span>
+              </div>
+              <h3 class="itemTitle_WMC3">Lei n.º 7/25, de 24 de Julho</h3>
+              <span class="itemCategory_KN2U">Assembleia Nacional</span>
+            </div>
+            <div class="itemArrow_H2zG">→</div>
+          </a>
+        </li>
+      </ul>
+      <div class="viewMoreWrapper_sdR_">
+        <a class="viewMoreButton_UGsG" href="/docs/category/assembleia-nacional">Ver todos os diplomas<span class="buttonArrow_tjVx">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- IA BOT -->
+  <a href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer" class="ia-bot" aria-label="Abrir IA Jurídica">
+    <i class="fas fa-robot"></i>
+  </a>
+
+  <!-- FOOTER -->
+  <footer class="footer footer--dark">
+    <div class="container">
+      <div class="row footer__links">
+        <div class="col footer__col">
+          <div class="footer__title">Normas e Avisos</div>
+          <ul class="footer__items clean-list">
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/agência-angolana-de-regulação-e-supervisão-de-seguros">AARSEG</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/agência-nacional-de-petróleo-gás-e-biocombustíveis">ANPG</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/autoridade-reguladora-da-concorrência">ARC</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/banco-nacional-de-angola">BNA</a></li>
+          </ul>
+        </div>
+        <div class="col footer__col">
+          <div class="footer__title">Instrutivos</div>
+          <ul class="footer__items clean-list">
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/cne---comissão-nacional-eleitoral">CNE</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-angolano-das-comunicações">INACOM</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-de-desenvolvimento-industrial-de-angola">IDIA</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-de-preços-e-concorrência">IPREC</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-de-supervisão-de-jogos">INSJ</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-regulador-dos-derivados-do-petróleo">IRDP</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-regulador-dos-serviços-de-electricidade-e-de-água">IRSEA</a></li>
+          </ul>
+        </div>
+        <div class="col footer__col">
+          <div class="footer__title">Legislação</div>
+          <ul class="footer__items clean-list">
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/assembleia-nacional">Assembleia Nacional</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/assembleia-do-povo">Assembleia do Povo</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/presidente-da-república">Presidente da República</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/conselho-de-ministros">Conselho de Ministros</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/tribunal-supremo">Tribunal Supremo</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom text--center">
+        <div class="footer__copyright">
+          2025 © Criado em 🇦🇴 por <a href="https://pixel.ao">Pixel Infinito</a> | Última atualização em 25 de setembro de 2025
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Mobile Menu Toggle
+    const toggle = document.querySelector('.navbar__toggle');
+    const sidebar = document.getElementById('navbarSidebar');
+    const backdrop = document.getElementById('navbarBackdrop');
+
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      backdrop.classList.toggle('active');
+      toggle.setAttribute('aria-expanded', sidebar.classList.contains('active'));
+    });
+
+    backdrop.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      backdrop.classList.remove('active');
+      toggle.setAttribute('aria-expanded', false);
+    });
+
+    // Close sidebar on link click
+    document.querySelectorAll('.navbar__sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        backdrop.classList.remove('active');
+        toggle.setAttribute('aria-expanded', false);
+      });
+    });
+  </script>
+//CHAT
+  <script type="module">
+    import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+    Chatbot.init({
+        chatflowid: "6f076ea7-de2b-4403-855f-85d386c94ac2",
+        apiHost: "http://localhost:3000",
+    })
+</script>
+
+</body>
+</html>
