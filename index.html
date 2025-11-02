@@ -466,7 +466,7 @@
   <nav aria-label="Navegação principal" class="navbar">
     <div class="navbar__inner container">
       <a class="navbar__brand" href="/">
-        <i class="fa-solid fa-scale-balanced"></i> Lex.AO
+        <i class="fa-solid fa-scale-balanced"></i>
       </a>
       <button class="navbar__toggle" aria-label="Alternar menu" aria-expanded="false">
         <i class="fas fa-bars"></i>
@@ -475,6 +475,9 @@
         <li><a class="navbar__link" href="/docs/intro">Diplomas</a></li>
         <li><a class="navbar__link" href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer">IA Jurídica ✨</a></li>
       </ul>
+
+    
+      <!-- input de pesquisa
       <div class="navbarSearchContainer_Bca1">
         <button type="button" class="DocSearch DocSearch-Button" aria-label="Buscar">
           <span class="DocSearch-Button-Container">
@@ -485,7 +488,7 @@
             <span class="DocSearch-Button-Placeholder">Buscar</span>
           </span>
         </button>
-      </div>
+      </div> -->
     </div>
     <!-- MOBILE SIDEBAR -->
     <div class="navbar__sidebar" id="navbarSidebar">
@@ -676,10 +679,12 @@
     </div>
   </section>
 
-  <!-- IA BOT -->
+  <!-- IA BOT 
   <a href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer" class="ia-bot" aria-label="Abrir IA Jurídica">
     <i class="fas fa-robot"></i>
   </a>
+-->
+ 
 
   <!-- FOOTER -->
   <footer class="footer footer--dark">
@@ -753,14 +758,15 @@
       });
     });
   </script>
-//CHAT
-  <script type="module">
-    import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
-    Chatbot.init({
-        chatflowid: "6f076ea7-de2b-4403-855f-85d386c94ac2",
-        apiHost: "http://localhost:3000",
-    })
+
+//AGENTE DE IA
+
+<script>
+  window.chtlConfig = { chatbotId: "4371483852" };
 </script>
+<script async data-id="4371483852" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js">
+  </script>
+
 
 </body>
 </html>
