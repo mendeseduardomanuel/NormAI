@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diplomas - NormAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<link rel="icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav aria-label="Navegação principal" class="navbar">
+    <div class="navbar__inner container">
+      <a class="navbar__brand" href="index.html">
+        <i class="fa-solid fa-scale-balanced"></i>
+      </a>
+      <button class="navbar__toggle" aria-label="Alternar menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="navbar__items">
+        <li><a class="navbar__link" href="diplomas.html">Diplomas</a></li>
+        <li><a class="navbar__link" href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer">IA Jurídica ✨</a></li>
+      </ul>
+
+    
+      <!-- input de pesquisa
+      <div class="navbarSearchContainer_Bca1">
+        <button type="button" class="DocSearch DocSearch-Button" aria-label="Buscar">
+          <span class="DocSearch-Button-Container">
+            <svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"/>
+              <path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="DocSearch-Button-Placeholder">Buscar</span>
+          </span>
+        </button>
+      </div> -->
+    </div>
+    <!-- MOBILE SIDEBAR -->
+    <div class="navbar__sidebar" id="navbarSidebar">
+      <ul>
+        <li><a href="diplomas.html">Diplomas</a></li>
+        <li><a href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer">IA Jurídica</a></li>
+        <li><a href="pequisa.html">Pesquisar Leis</a></li>
+      </ul>
+    </div>
+    <div class="navbar__backdrop" id="navbarBackdrop"></div>
+  </nav>
+
+
+<section class="hero">
+  <h1>Diplomas</h1>
+  <p>Explore todos os diplomas legais de Angola de forma organizada e prática.</p>
+</section>
+
+<div class="container">
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Pesquisar diplomas pelo nome ou número...">
+  </div>
+  <div class="cards" id="diplomas-container">
+    <!-- Cards serão inseridos dinamicamente -->
+  </div>
+</div>
+
+  <!-- FOOTER -->
+  <footer class="footer footer--dark">
+    <div class="container">
+      <div class="row footer__links">
+        <div class="col footer__col">
+          <div class="footer__title">Normas e Avisos</div>
+          <ul class="footer__items clean-list">
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/agência-angolana-de-regulação-e-supervisão-de-seguros">AARSEG</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/agência-nacional-de-petróleo-gás-e-biocombustíveis">ANPG</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/autoridade-reguladora-da-concorrência">ARC</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/banco-nacional-de-angola">BNA</a></li>
+          </ul>
+        </div>
+        <div class="col footer__col">
+          <div class="footer__title">Instrutivos</div>
+          <ul class="footer__items clean-list">
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/cne---comissão-nacional-eleitoral">CNE</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-angolano-das-comunicações">INACOM</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-de-desenvolvimento-industrial-de-angola">IDIA</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-de-preços-e-concorrência">IPREC</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-de-supervisão-de-jogos">INSJ</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-regulador-dos-derivados-do-petróleo">IRDP</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/instituto-regulador-dos-serviços-de-electricidade-e-de-água">IRSEA</a></li>
+          </ul>
+        </div>
+        <div class="col footer__col">
+          <div class="footer__title">Legislação</div>
+          <ul class="footer__items clean-list">
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/assembleia-nacional">Assembleia Nacional</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/assembleia-do-povo">Assembleia do Povo</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/presidente-da-república">Presidente da República</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/conselho-de-ministros">Conselho de Ministros</a></li>
+            <li class="footer_item"><a class="footer_link-item" href="/docs/category/tribunal-supremo">Tribunal Supremo</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom text--center">
+        <div class="footer__copyright">
+          2025 © Criado em 🇦🇴 por <a href="#">Ad Astra</a> | Última atualização em 25 de setembro de 2025
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+  <!--Agent-->
+
+<script> window.chtlConfig = { chatbotId: "4278977611" } </script>
+<script async data-id="4278977611" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
+<!-- SCRIPTS -->
+  <script>
+    // Mobile Menu Toggle
+    const toggle = document.querySelector('.navbar__toggle');
+    const sidebar = document.getElementById('navbarSidebar');
+    const backdrop = document.getElementById('navbarBackdrop');
+
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      backdrop.classList.toggle('active');
+      toggle.setAttribute('aria-expanded', sidebar.classList.contains('active'));
+    });
+
+    backdrop.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      backdrop.classList.remove('active');
+      toggle.setAttribute('aria-expanded', false);
+    });
+
+    // Close sidebar on link click
+    document.querySelectorAll('.navbar__sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        backdrop.classList.remove('active');
+        toggle.setAttribute('aria-expanded', false);
+      });
+    });
+  </script>
+
+
+<script>
+const diplomas = [
+  {
+    titulo: "Agência Angolana de Regulação e Supervisão de Seguros",
+    resumo: "Documentos legais relacionados à regulação e supervisão de seguros em Angola.",
+    link: "https://lex.ao/docs/intro#3"
+  },
+  {
+    titulo: "Assembleia Nacional",
+    resumo: "Legislação e diplomas emitidos pela Assembleia Nacional.",
+    link: "https://lex.ao/docs/intro#4"
+  },
+  {
+    titulo: "Autoridade Nacional de Inspecção Económica e Segurança Alimentar",
+    resumo: "Normas emitidas pela Autoridade Nacional de Inspecção Económica e Segurança Alimentar.",
+    link: "https://lex.ao/docs/intro#5"
+  },
+  {
+    titulo: "Banco Nacional de Angola",
+    resumo: "Diplomas relacionados ao sistema financeiro e regulamentos bancários.",
+    link: "https://lex.ao/docs/intro#6"
+  },
+  {
+    titulo: "Ministérios das Finanças e da Saúde",
+    resumo: "Legislação emitida pelos ministérios das finanças e da saúde.",
+    link: "https://lex.ao/docs/intro#8"
+  }
+  // Adicione mais diplomas aqui seguindo o mesmo formato
+];
+
+function displayDiplomas(list) {
+  const container = document.getElementById('diplomas-container');
+  container.innerHTML = '';
+  list.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <h3>${d.titulo}</h3>
+      <p>${d.resumo}</p>
+      <a href="${d.link}" target="_blank">Ver mais</a>
+    `;
+    container.appendChild(card);
+  });
+}
+
+document.getElementById('search').addEventListener('input', function() {
+  const query = this.value.toLowerCase();
+  const filtered = diplomas.filter(d => d.titulo.toLowerCase().includes(query));
+  displayDiplomas(filtered);
+});
+
+// Inicializa a lista completa
+displayDiplomas(diplomas);
+</script>
+
+</body>
+</html>
