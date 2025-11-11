@@ -1,6 +1,7 @@
 /**
  * NormAI - Assistente Jurídico e Universitário Inteligente
- * Integra WhatsApp (Twilio), Lex.AO e Universidade Kimpa Vita
+ * Agora com suporte a PDFs (leis, regulamentos, documentos acadêmicos)
+ * Integração com WhatsApp via Twilio
  */
 
 const express = require("express");
@@ -8,41 +9,62 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const cors = require("cors");
+const fs = require("fs");
+const pdf = require("pdf-parse");
 const { MessagingResponse } = require("twilio").twiml;
 
 const app = express();
-app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname)));
 
-const cache = {}; // cache em memória
+// Cache simples em memória
+const cache = {};
 
-// 🔍 Função de busca genérica (Lex.AO e Kimpa Vita)
+// Caminho da pasta onde vais colocar os PDFs
+const PDF_DIR = path.join(__dirname, "pdfs");
+
+// Função para ler todos os PDFs da pasta e juntar o conteúdo
+async function lerPDFs() {
+  const arquivos = fs.existsSync(PDF_DIR) ? fs.readdirSync(PDF_DIR) : [];
+  let textoTotal = "";
+
+  for (const arquivo of arquivos) {
+    if (arquivo.endsWith(".pdf")) {
+      const dataBuffer = fs.readFileSync(path.join(PDF_DIR, arquivo));
+      const texto = (await pdf(dataBuffer)).text;
+      textoTotal += `\n\n[${arquivo}]\n${texto}`;
+    }
+  }
+
+  return textoTotal;
+}
+
+// Busca conteúdo em sites e PDFs
 async function buscarConteudo(fonte, termo) {
   try {
     const termoLower = termo.toLowerCase();
 
-    // Cache de 30 min
-    if (cache[fonte] && Date.now() - cache[fonte].time < 1800000) {
-      console.log("🧠 Cache usado:", fonte);
+    // Cache de fonte
+    if (cache[fonte] && Date.now() - cache[fonte].time < 1000 * 60 * 30) {
+      console.log("🧠 Usando cache para:", fonte);
       return filtrarConteudo(cache[fonte].data, termoLower);
     }
 
-    console.log("🌐 Buscando conteúdo de:", fonte);
-    const { data } = await axios.get(fonte);
-    const $ = cheerio.load(data);
+    console.log("🌐 Buscando conteúdo da fonte:", fonte);
+
+    const response = await axios.get(fonte);
+    const $ = cheerio.load(response.data);
     const texto = $("body").text();
 
     cache[fonte] = { data: texto, time: Date.now() };
+
     return filtrarConteudo(texto, termoLower);
-  } catch (err) {
-    console.error("⚠️ Erro ao buscar:", fonte, err.message);
+  } catch (error) {
+    console.error("Erro ao buscar conteúdo:", error.message);
     return null;
   }
 }
 
-// 📖 Filtra o trecho mais relevante
+// Função para filtrar o trecho mais relevante
 function filtrarConteudo(texto, termo) {
   const linhas = texto
     .split("\n")
@@ -50,43 +72,62 @@ function filtrarConteudo(texto, termo) {
     .filter((l) => l);
   const relevantes = linhas.filter((l) => l.toLowerCase().includes(termo));
 
-  if (!relevantes.length) return null;
+  if (relevantes.length === 0) return null;
+
   const resposta = relevantes.slice(0, 3).join(" ");
   return resposta.length > 600 ? resposta.slice(0, 600) + "..." : resposta;
 }
 
-// 🤖 Lógica do agente NormAI
+// Função principal
 async function responderPergunta(pergunta) {
+  const termo = pergunta.toLowerCase();
   const fontes = ["https://lex.ao/docs/intro", "https://unikivi.ed.ao"];
 
+  // 1️⃣ Busca nos sites
   for (const fonte of fontes) {
-    const resultado = await buscarConteudo(fonte, pergunta);
+    const resultado = await buscarConteudo(fonte, termo);
     if (resultado) {
-      return `${resultado}\n\n📚 Fonte: NormAI — baseado em Lex.AO e Universidade Kimpa Vita.`;
+      return `${resultado}\n\n📚 Fonte: Lex.AO / Universidade Kimpa Vita`;
     }
   }
 
-  return "❌ Não encontrei esta informação no Lex.AO nem no site da Universidade Kimpa Vita. Tente reformular a pergunta. 📘";
+  // 2️⃣ Busca nos PDFs locais
+  const textoPDFs = await lerPDFs();
+  const respostaPDF = filtrarConteudo(textoPDFs, termo);
+  if (respostaPDF) {
+    return `${respostaPDF}\n\n📄 Fonte: Documentos PDF da Universidade Kimpa Vita.`;
+  }
+
+  return "Ainda não encontrei esta informação no Lex.AO ou nos documentos PDF, mas estou aprendendo. 📚";
 }
 
-// 🧾 Endpoint WhatsApp (Twilio)
+// Servir arquivos estáticos
+app.use(express.static(path.join(__dirname)));
+
+// Página principal
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// Endpoint WhatsApp (Twilio)
 app.post("/whatsapp", async (req, res) => {
   const twiml = new MessagingResponse();
   const message = req.body.Body?.trim() || "";
+
   console.log("📩 Mensagem recebida:", message);
 
   let resposta;
 
   if (!message) {
     resposta =
-      "👋 Olá! Eu sou a NormAI. Pergunte-me sobre leis de Angola ou regulamentos da Universidade Kimpa Vita.";
+      "Olá! Envie uma pergunta sobre leis ou sobre a Universidade Kimpa Vita.";
   } else if (
     ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite"].includes(
       message.toLowerCase()
     )
   ) {
     resposta =
-      "👋 Olá! Eu sou a NormAI, assistente jurídica e universitária. Pergunte-me sobre leis ou regulamentos académicos.";
+      "👋 Olá! Eu sou a NormAI, assistente jurídica e universitária. Pergunte-me sobre leis angolanas ou regulamentos da Universidade Kimpa Vita!";
   } else {
     resposta = await responderPergunta(message);
   }
@@ -96,37 +137,8 @@ app.post("/whatsapp", async (req, res) => {
   res.end(twiml.toString());
 });
 
-// 🧾 Endpoint para diplomas
-app.get("/api/diplomas", async (req, res) => {
-  try {
-    const { data } = await axios.get("https://lex.ao/docs/intro");
-    const $ = cheerio.load(data);
-    const diplomas = [];
-
-    // Captura flexível (mesmo que classes mudem)
-    $("a[href*='/docs/']").each((i, el) => {
-      if (i < 8) {
-        diplomas.push({
-          titulo: $(el).text().trim().slice(0, 120),
-          link: "https://lex.ao" + $(el).attr("href"),
-        });
-      }
-    });
-
-    res.json(diplomas);
-  } catch (error) {
-    console.error("Erro ao buscar diplomas:", error.message);
-    res.status(500).json({ erro: "Falha ao obter diplomas." });
-  }
-});
-
-// 🌍 Página principal
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-
-// 🚀 Porta
+// Porta dinâmica (para Render)
 const PORT = process.env.PORT || 1000;
 app.listen(PORT, () =>
-  console.log(`🚀 Servidor NormAI ativo na porta ${PORT}`)
+  console.log(`🚀 NormAI com suporte a PDFs ativo na porta ${PORT}`)
 );

@@ -1,54 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NormAI - Diplomas</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<style>
-  :root {
-    --primary-color: #6C0E26;
-    --secondary-color: #581324;
-    --white-color: #ffffff;
-  }
-  body { font-family: 'Inter', sans-serif; margin: 0; background: #fff; color: #333; }
-  header, footer { background: var(--primary-color); color: var(--white-color); padding: 1rem 2rem; }
-  nav a { color: #fff; margin-right: 1rem; text-decoration: none; font-weight: 600; }
-  nav a:hover { text-decoration: underline; }
-  .hero { background: var(--secondary-color); color: #fff; padding: 3rem 2rem; text-align: center; }
-  .hero h1 { margin: 0; font-size: 2.5rem; }
-  .hero p { margin-top: 0.5rem; font-size: 1.2rem; }
-  .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-  .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; }
-  .card:hover { transform: translateY(-5px); box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
-  .card h3 { margin-top: 0; color: var(--primary-color); }
-  .card p { margin: 0.5rem 0 1rem; }
-  .card a { display: inline-block; padding: 0.5rem 1rem; background: var(--primary-color); color: #fff; border-radius: 6px; text-decoration: none; transition: background 0.3s; }
-  .card a:hover { background: var(--secondary-color); }
-  footer { text-align: center; font-size: 0.9rem; }
-</style>
-</head>
-  <link rel="icon" href="img/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NormAI | Direito Angolano: Acesso Fácil e Gratuito</title>
+  <meta name="description" content="Tenha acesso fácil e gratuito ao Direito Angolano com a plataforma NormAI. Informações jurídicas claras e atualizadas para empresários, advogados e cidadãos.">
+  <link rel="icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
- <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="style.css">
+  <style>
+
+    /* === CARDS DE DIPLOMAS === */
+    .diplomas-section { padding: 60px 20px; }
+    .diplomas-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 24px; }
+    .diploma-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .diploma-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .diploma-title { font-size: 18px; font-weight: 600; color: #6C0E26; margin-bottom: 10px; }
+    .diploma-summary { font-size: 14px; color: #666; flex-grow: 1; margin-bottom: 12px; }
+    .diploma-link {
+      text-decoration: none;
+      color: #fff;
+      background: #6C0E26;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .diploma-link:hover { background: #581324; }
+
+
+    .footer__links { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+    .footer__col { min-width: 200px; }
+    .footer__title { margin-bottom: 20px; font-size: 18px; color: #ffcccc; }
+    .footer__items { list-style: none; }
+    .footer__link-item { display: block; color: white; text-decoration: none; font-size: 16px; margin-bottom: 12px; transition: 0.2s; }
+    .footer__link-item:hover { color: #ffcccc; text-decoration: underline; }
+    .footer__bottom { text-align: center; color: #ccc; font-size: 14px; padding-top: 20px; border-top: 1px solid #6a1a2e; }
+
+    /* === RESPONSIVO === */
+    @media (max-width: 768px) {
+      .navbar__toggle { display: block; }
+      .navbar__items { display: none; }
+      .hero__title { font-size: 36px; }
+      .hero__subtitle { font-size: 18px; }
+      .diplomas-row { grid-template-columns: 1fr; gap: 20px; }
+    }
+    @media (max-width: 480px) { .hero__title { font-size: 28px; } }
+   
+  </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
+ <!-- NAVBAR -->
   <nav aria-label="Navegação principal" class="navbar">
     <div class="navbar__inner container">
       <a class="navbar__brand" href="index.html">
-        <i class="fa-solid fa-scale-balanced"></i>NormAI.com
+        <i class="fa-solid fa-scale-balanced"></i>
       </a>
       <button class="navbar__toggle" aria-label="Alternar menu" aria-expanded="false">
         <i class="fas fa-bars"></i>
       </button>
       <ul class="navbar__items">
         <li><a class="navbar__link" href="diplomas.html">Diplomas</a></li>
-        <li><a class="navbar__link" href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer">IA Jurídica ✨</a></li>
+        <li><a class="navbar__link" href="#" target="_blank" rel="noopener noreferrer">Chat Bot via Whatsapp ✨</a></li>
       </ul>
 
     
@@ -69,28 +96,29 @@
     <div class="navbar__sidebar" id="navbarSidebar">
       <ul>
         <li><a href="diplomas.html">Diplomas</a></li>
-        <li><a href="https://chat.lex.ao" target="_blank" rel="noopener noreferrer">IA Jurídica</a></li>
+        <li><a href="#" target="_blank" rel="noopener noreferrer">Chat Bot via Whatsapp</a></li>
         <li><a href="pequisa.html">Pesquisar Leis</a></li>
       </ul>
     </div>
     <div class="navbar__backdrop" id="navbarBackdrop"></div>
   </nav>
 
-<section class="hero">
-  <h1>Diplomas</h1>
-  <p>Explore diplomas legais de Angola diretamente do Lex.AO, organizados para você.</p>
-</section>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <h1 class="hero__title">Diplomas</h1>
+      <p class="hero__subtitle">Lista completa de diplomas legais de Angola, organizada para fácil consulta.</p>
+    </div>
+  </header>
 
-<div class="container">
-  <h2>Diplomas em destaque</h2>
-  <div class="cards" id="diplomas-container">
-    <!-- Cards serão carregados dinamicamente -->
-  </div>
-</div>
+  <!-- DIPLOMAS -->
+  <section class="diplomas-section container">
+    <div class="diplomas-row" id="diplomasContainer">
+      <!-- Diploma cards serão gerados pelo JS -->
+    </div>
+  </section>
 
-
- 
-  <!-- FOOTER -->
+   <!-- FOOTER -->
   <footer class="footer footer--dark">
     <div class="container">
       <div class="row footer__links">
@@ -140,7 +168,7 @@
 <script> window.chtlConfig = { chatbotId: "4278977611" } </script>
 <script async data-id="4278977611" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
 
-<!-- SCRIPTS -->
+  <!-- SCRIPTS -->
   <script>
     // Mobile Menu Toggle
     const toggle = document.querySelector('.navbar__toggle');
@@ -152,7 +180,6 @@
       backdrop.classList.toggle('active');
       toggle.setAttribute('aria-expanded', sidebar.classList.contains('active'));
     });
-
     backdrop.addEventListener('click', () => {
       sidebar.classList.remove('active');
       backdrop.classList.remove('active');
@@ -167,49 +194,43 @@
         toggle.setAttribute('aria-expanded', false);
       });
     });
+
+    // Dados de diplomas (exemplo estático com 50 diplomas)
+    const diplomas = [];
+    for(let i=1;i<=50;i++){
+      diplomas.push({
+        title: `Diploma n.º ${i}/25`,
+        summary: `Resumo do diploma número ${i}, detalhando aspectos legais importantes para consulta.`,
+        link: `https://lex.ao/docs/intro#diploma-${i}`
+      });
+    }
+
+    // Renderizar diplomas
+    const container = document.getElementById('diplomasContainer');
+    function renderDiplomas(list){
+      container.innerHTML = '';
+      list.forEach(d => {
+        const card = document.createElement('a');
+        card.className = 'diploma-card';
+        card.href = d.link;
+        card.target = '_blank';
+        card.innerHTML = `
+          <h3 class="diploma-title">${d.title}</h3>
+          <p class="diploma-summary">${d.summary}</p>
+          <span class="diploma-link">Ver mais →</span>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    renderDiplomas(diplomas);
+
+    // Pesquisa
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', e => {
+      const filtered = diplomas.filter(d => d.title.toLowerCase().includes(e.target.value.toLowerCase()));
+      renderDiplomas(filtered);
+    });
   </script>
-
-
-<!--Carrega os diplomas-->
-
-<script>
-async function fetchDiplomas() {
-  try {
-    const response = await fetch('/api/diplomas');
-    const diplomas = await response.json();
-    displayDiplomas(diplomas);
-  } catch (err) {
-    console.error('Erro ao buscar diplomas:', err);
-    document.getElementById('diplomas-container').innerHTML =
-      '<p style="color:red;">❌ Falha ao carregar diplomas.</p>';
-  }
-}
-
-function displayDiplomas(list) {
-  const container = document.getElementById('diplomas-container');
-  container.innerHTML = '';
-
-  if (!list.length) {
-    container.innerHTML = '<p>Nenhum diploma encontrado.</p>';
-    return;
-  }
-
-  list.forEach(d => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <h3>${d.titulo}</h3>
-      <p><strong>${d.categoria}</strong> — ${d.data}</p>
-      <a href="${d.link}" target="_blank">Ver diploma</a>
-    `;
-    container.appendChild(card);
-  });
-}
-
-fetchDiplomas();
-</script>
-
-
-
 </body>
 </html>
