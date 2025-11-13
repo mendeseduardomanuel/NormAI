@@ -1,17 +1,23 @@
 /**
- * NormAI - Assistente Jurídico e Universitário Inteligente (Botões Interativos)
+ * NormAI - Assistente Jurídico e Universitário Inteligente (Offline Interativo)
+ * Navegação por números (1,2,3...) e "0" para voltar
  * Autor: Mendes Eduarda
- * Pronto para Render + index.html
  */
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const { MessagingResponse } = require("twilio").twiml;
 const path = require("path");
+const { MessagingResponse } = require("twilio").twiml;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// === Servir index.html e arquivos estáticos ===
+app.use(express.static(path.join(__dirname, "public")));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // === Estado de cada usuário ===
 const userContext = {};
@@ -19,107 +25,68 @@ const userContext = {};
 // === MENUS ===
 function menuPrincipal() {
   return {
-    text: "👋 *Bem-vindo à NormAI!*\nEscolha o tipo de informação:",
-    buttons: [
-      { id: "leis", title: "📚 Leis e Regulamentos" },
-      { id: "universidade", title: "🎓 Universidade Kimpa Vita" },
-      { id: "infracoes", title: "🚨 Infrações e Sanções" },
-    ],
+    text: "👋 *Bem-vindo à NormAI!*\n\nEscolha o tipo de informação que deseja:\n1 - 📚 Leis e Regulamentos\n2 - 🎓 Universidade Kimpa Vita\n3 - 🚨 Infrações e Sanções",
   };
 }
 
 function menuLeis() {
   return {
-    text: "📘 *Leis e Regulamentos*\nSelecione um diploma:",
-    buttons: [
-      { id: "Constituição da República", title: "Constituição da República" },
-      { id: "Lei da Probidade Pública", title: "Lei da Probidade Pública" },
-      { id: "Lei de Base da Educação", title: "Lei de Base da Educação" },
-      { id: "Lei do Investimento Privado", title: "Lei do Investimento Privado" },
-      { id: "⬅️ Voltar", title: "⬅️ Voltar" },
-    ],
+    text: "📘 *Leis e Regulamentos (Lex.AO)*\nEscolha uma opção:\n1 - Constituição da República\n2 - Lei da Probidade Pública\n3 - Lei de Base da Educação\n4 - Lei do Investimento Privado\n5 - Lei de Imprensa\n6 - Lei da Família\n7 - Lei de Terras\n\n0 - Voltar",
   };
 }
 
 function menuUniversidade() {
   return {
-    text: "🎓 *Universidade Kimpa Vita*\nEscolha uma opção:",
-    buttons: [
-      { id: "Regulamento Académico", title: "Regulamento Académico" },
-      { id: "Cursos disponíveis", title: "Cursos disponíveis" },
-      { id: "Processos de matrícula", title: "Processos de matrícula" },
-      { id: "Contactos e horários", title: "Contactos e horários" },
-      { id: "⬅️ Voltar", title: "⬅️ Voltar" },
-    ],
+    text: "🎓 *Universidade Kimpa Vita*\nEscolha uma opção:\n1 - Regulamento Académico\n2 - Cursos disponíveis\n3 - Processos de matrícula\n4 - Contactos e horários\n\n0 - Voltar",
   };
 }
 
 function menuInfracoes() {
   return {
-    text: "🚨 *Infrações e Sanções Académicas*\nSelecione uma categoria:",
-    buttons: [
-      { id: "Infrações leves", title: "Infrações leves" },
-      { id: "Infrações graves", title: "Infrações graves" },
-      { id: "Penalizações e recursos", title: "Penalizações e recursos" },
-      { id: "⬅️ Voltar", title: "⬅️ Voltar" },
-    ],
+    text: "🚨 *Infrações e Sanções Académicas*\nEscolha uma categoria:\n1 - Infrações leves\n2 - Infrações graves\n3 - Penalizações e recursos\n\n0 - Voltar",
   };
 }
 
 // === CONTEÚDOS ===
 const conteudos = {
   "Constituição da República":
-    "📘 *Constituição da República de Angola*\nPrincípios fundamentais do Estado, direitos e deveres dos cidadãos, e organização dos poderes públicos.",
+    "📘 *Constituição da República de Angola*\nPrincípios fundamentais do Estado, direitos e deveres dos cidadãos, organização dos poderes públicos.",
   "Lei da Probidade Pública":
-    "📘 *Lei da Probidade Pública*\nRegula conduta ética e combate à corrupção.",
+    "📘 *Lei da Probidade Pública*\nRegula a conduta ética dos servidores públicos e combate à corrupção.",
   "Lei de Base da Educação":
     "📘 *Lei de Base da Educação*\nDefine princípios e objetivos do sistema nacional de ensino.",
   "Lei do Investimento Privado":
-    "📘 *Lei do Investimento Privado*\nRegula investimentos nacionais e estrangeiros.",
+    "📘 *Lei do Investimento Privado*\nRegula o investimento nacional e estrangeiro e incentiva o desenvolvimento económico.",
+  "Lei de Imprensa":
+    "📘 *Lei de Imprensa*\nGarante a liberdade de expressão e regula a atividade jornalística.",
+  "Lei da Família":
+    "📘 *Lei da Família*\nDefine relações familiares, direitos, deveres e processos de casamento e tutela.",
+  "Lei de Terras":
+    "📘 *Lei de Terras*\nRegras sobre posse, uso e transmissão de terras.",
   "Regulamento Académico":
-    "🎓 *Regulamento Académico UNIKIV*\nRegras de frequência, avaliações e conduta dos estudantes.",
+    "🎓 *Regulamento Académico da UNIKIV*\nRegras de frequência, avaliações e conduta dos estudantes.",
   "Cursos disponíveis":
-    "🎓 *Cursos oferecidos*\nEngenharia Informática, Direito, Economia, Enfermagem, Psicologia, Educação e mais.",
+    "🎓 *Cursos oferecidos*\nEngenharia Informática, Direito, Economia, e mais.",
   "Processos de matrícula":
-    "📝 *Processos de matrícula*\nDocumentos necessários: BI, certificado de habilitações e comprovativo de pagamento.",
+    "📝 *Processos de matrícula*\nApresentar BI, certificado e comprovativo de pagamento.",
   "Contactos e horários":
-    "📞 *Contactos da Universidade Kimpa Vita*\nEndereço: Uíge, Angola\nAtendimento: 8h às 15h\nEmail: info@unikiv.ao",
+    "📞 *Contactos da UNIKIV*\nEndereço: Uíge, Angola.\nAtendimento: 8h às 15h.\nEmail: info@unikiv.ao",
   "Infrações leves":
-    "⚠️ *Infrações leves*\nFaltas leves, atrasos, comportamentos inapropriados.",
+    "⚠️ *Infrações leves*\nFaltas leves, atrasos e comportamentos inapropriados.",
   "Infrações graves":
-    "🚫 *Infrações graves*\nPlágio, agressão, falsificação de documentos.",
+    "🚫 *Infrações graves*\nPlágio, agressão, falsificação de documentos ou fraude académica.",
   "Penalizações e recursos":
-    "⚖️ *Penalizações*\nDe advertência até expulsão, com direito a recurso.",
+    "⚖️ *Penalizações e Recursos*\nAdvertência, suspensão ou expulsão, com direito a recurso.",
 };
 
-// === Função para gerar resposta com botões interativos ===
-function gerarRespostaWhatsApp(menu) {
+// === Função para gerar respostas WhatsApp ===
+function gerarRespostaWhatsApp(texto) {
   const twiml = new MessagingResponse();
-
-  const message = twiml.message();
-  message.body(menu.text);
-
-  if (menu.buttons && menu.buttons.length > 0) {
-    const interactive = {
-      type: "interactive",
-      interactive: {
-        type: "button",
-        body: { text: menu.text },
-        action: {
-          buttons: menu.buttons.map((b) => ({
-            type: "reply",
-            reply: { id: b.id, title: b.title },
-          })),
-        },
-      },
-    };
-    message.addChild("Message", {}, interactive);
-  }
-
+  twiml.message(texto);
   return twiml.toString();
 }
 
-// === Endpoint WhatsApp ===
+// === Lógica principal ===
 app.post("/whatsapp", (req, res) => {
   const from = req.body.From || "anon";
   const message = req.body.Body?.trim() || "";
@@ -127,51 +94,72 @@ app.post("/whatsapp", (req, res) => {
 
   console.log("📩 Mensagem recebida:", message);
 
-  let resposta;
+  let resposta = {};
 
-  if (message === "⬅️ Voltar" || message === "menu") {
+  // Voltar ao menu principal
+  if (message === "0") {
     userContext[from] = "menu";
     resposta = menuPrincipal();
   } else if (estado === "menu") {
-    if (message === "leis") {
+    if (message === "1") {
       userContext[from] = "leis";
       resposta = menuLeis();
-    } else if (message === "universidade") {
+    } else if (message === "2") {
       userContext[from] = "universidade";
       resposta = menuUniversidade();
-    } else if (message === "infracoes") {
+    } else if (message === "3") {
       userContext[from] = "infracoes";
       resposta = menuInfracoes();
     } else {
       resposta = menuPrincipal();
     }
-  } else if (estado === "leis" || estado === "universidade" || estado === "infracoes") {
-    if (message === "⬅️ Voltar") {
-      userContext[from] = "menu";
-      resposta = menuPrincipal();
-    } else if (conteudos[message]) {
+  } else if (
+    estado === "leis" ||
+    estado === "universidade" ||
+    estado === "infracoes"
+  ) {
+    const opcaoMap = {
+      leis: [
+        "Constituição da República",
+        "Lei da Probidade Pública",
+        "Lei de Base da Educação",
+        "Lei do Investimento Privado",
+        "Lei de Imprensa",
+        "Lei da Família",
+        "Lei de Terras",
+      ],
+      universidade: [
+        "Regulamento Académico",
+        "Cursos disponíveis",
+        "Processos de matrícula",
+        "Contactos e horários",
+      ],
+      infracoes: [
+        "Infrações leves",
+        "Infrações graves",
+        "Penalizações e recursos",
+      ],
+    };
+
+    const escolha = opcaoMap[estado][parseInt(message) - 1];
+    if (escolha && conteudos[escolha]) {
+      resposta = { text: conteudos[escolha] + "\n\nDigite 0 para voltar." };
       userContext[from] = "submenu";
-      resposta = { text: conteudos[message] + "\n\nClique em '⬅️ Voltar' para voltar ao menu." };
     } else {
-      resposta = { text: "❓ Opção inválida. Clique em '⬅️ Voltar'." };
+      resposta = { text: "❌ Opção inválida. Digite 0 para voltar." };
     }
-  } else if (estado === "submenu" && message === "⬅️ Voltar") {
+  } else if (estado === "submenu" && message === "0") {
     userContext[from] = "menu";
     resposta = menuPrincipal();
   }
 
-  const xml = gerarRespostaWhatsApp(resposta);
+  const xml = gerarRespostaWhatsApp(resposta.text || resposta);
   res.writeHead(200, { "Content-Type": "text/xml" });
   res.end(xml);
 });
 
-// === Servir index.html e arquivos estáticos ===
-app.use(express.static(path.join(__dirname)));
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
 // === Servidor ===
 const PORT = process.env.PORT || 1000;
 app.listen(PORT, () =>
-  console.log(`🚀 NormAI com botões interativos ativo no Render na porta ${PORT}`)
+  console.log(`🚀 NormAI ativo no Render na porta ${PORT}`)
 );
