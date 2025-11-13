@@ -14,9 +14,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // === Servir index.html e arquivos estáticos ===
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname)));
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // === Estado de cada usuário ===
