@@ -1,149 +1,177 @@
 /**
- * NormAI - Assistente Jurídico e Universitário Inteligente
- * Com suporte a PDFs (leis, regulamentos e documentos acadêmicos)
- * Integração com WhatsApp via Twilio
+ * NormAI - Assistente Jurídico e Universitário Inteligente (Botões Interativos)
+ * Autor: Mendes Eduarda
+ * Pronto para Render + index.html
  */
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const path = require("path");
-const axios = require("axios");
-const cheerio = require("cheerio");
-const fs = require("fs");
-const pdfParse = require("pdf-parse"); // ✅ CORRIGIDO
 const { MessagingResponse } = require("twilio").twiml;
+const path = require("path");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); // ✅ CORRIGIDO
+app.use(bodyParser.json());
 
-// Cache simples em memória
-const cache = {};
+// === Estado de cada usuário ===
+const userContext = {};
 
-// Caminho da pasta onde vais colocar os PDFs
-const PDF_DIR = path.join(__dirname, "pdfs");
-
-// Função para ler todos os PDFs da pasta e juntar o conteúdo
-async function lerPDFs() {
-  const arquivos = fs.existsSync(PDF_DIR) ? fs.readdirSync(PDF_DIR) : [];
-  let textoTotal = "";
-
-  for (const arquivo of arquivos) {
-    if (arquivo.endsWith(".pdf")) {
-      try {
-        const dataBuffer = fs.readFileSync(path.join(PDF_DIR, arquivo));
-        const texto = (await pdfParse(dataBuffer)).text; // ✅ CORRIGIDO
-        textoTotal += `\n\n[${arquivo}]\n${texto}`;
-      } catch (erro) {
-        console.error(`Erro ao ler PDF ${arquivo}: ${erro.message}`);
-      }
-    }
-  }
-
-  return textoTotal;
+// === MENUS ===
+function menuPrincipal() {
+  return {
+    text: "👋 *Bem-vindo à NormAI!*\nEscolha o tipo de informação:",
+    buttons: [
+      { id: "leis", title: "📚 Leis e Regulamentos" },
+      { id: "universidade", title: "🎓 Universidade Kimpa Vita" },
+      { id: "infracoes", title: "🚨 Infrações e Sanções" },
+    ],
+  };
 }
 
-// Busca conteúdo em sites e PDFs
-async function buscarConteudo(fonte, termo) {
-  try {
-    const termoLower = termo.toLowerCase();
-
-    // Cache de fonte
-    if (cache[fonte] && Date.now() - cache[fonte].time < 1000 * 60 * 30) {
-      console.log("🧠 Usando cache para:", fonte);
-      return filtrarConteudo(cache[fonte].data, termoLower);
-    }
-
-    console.log("🌐 Buscando conteúdo da fonte:", fonte);
-
-    const response = await axios.get(fonte, { timeout: 10000 });
-    const $ = cheerio.load(response.data);
-    const texto = $("body").text();
-
-    cache[fonte] = { data: texto, time: Date.now() };
-
-    return filtrarConteudo(texto, termoLower);
-  } catch (error) {
-    console.error("Erro ao buscar conteúdo:", error.message);
-    return ""; // ✅ EVITA FALHA COMPLETA
-  }
+function menuLeis() {
+  return {
+    text: "📘 *Leis e Regulamentos*\nSelecione um diploma:",
+    buttons: [
+      { id: "Constituição da República", title: "Constituição da República" },
+      { id: "Lei da Probidade Pública", title: "Lei da Probidade Pública" },
+      { id: "Lei de Base da Educação", title: "Lei de Base da Educação" },
+      { id: "Lei do Investimento Privado", title: "Lei do Investimento Privado" },
+      { id: "⬅️ Voltar", title: "⬅️ Voltar" },
+    ],
+  };
 }
 
-// Função para filtrar o trecho mais relevante
-function filtrarConteudo(texto, termo) {
-  const linhas = texto
-    .split("\n")
-    .map((l) => l.trim())
-    .filter((l) => l);
-  const relevantes = linhas.filter((l) => l.toLowerCase().includes(termo));
-
-  if (relevantes.length === 0) return null;
-
-  const resposta = relevantes.slice(0, 3).join(" ");
-  return resposta.length > 600 ? resposta.slice(0, 600) + "..." : resposta;
+function menuUniversidade() {
+  return {
+    text: "🎓 *Universidade Kimpa Vita*\nEscolha uma opção:",
+    buttons: [
+      { id: "Regulamento Académico", title: "Regulamento Académico" },
+      { id: "Cursos disponíveis", title: "Cursos disponíveis" },
+      { id: "Processos de matrícula", title: "Processos de matrícula" },
+      { id: "Contactos e horários", title: "Contactos e horários" },
+      { id: "⬅️ Voltar", title: "⬅️ Voltar" },
+    ],
+  };
 }
 
-// Função principal
-async function responderPergunta(pergunta) {
-  const termo = pergunta.toLowerCase();
-  const fontes = ["https://lex.ao/docs/intro"]; // ✅ EVITAR DOMÍNIO INVÁLIDO
-
-  // 1️⃣ Busca nos sites
-  for (const fonte of fontes) {
-    const resultado = await buscarConteudo(fonte, termo);
-    if (resultado) {
-      return `${resultado}\n\n📚 Fonte: Lex.AO / Universidade Kimpa Vita`;
-    }
-  }
-
-  // 2️⃣ Busca nos PDFs locais
-  const textoPDFs = await lerPDFs();
-  const respostaPDF = filtrarConteudo(textoPDFs, termo);
-  if (respostaPDF) {
-    return `${respostaPDF}\n\n📄 Fonte: Documentos PDF da Universidade Kimpa Vita.`;
-  }
-
-  return "Ainda não encontrei esta informação no Lex.AO ou nos documentos PDF, mas estou aprendendo. 📚";
+function menuInfracoes() {
+  return {
+    text: "🚨 *Infrações e Sanções Académicas*\nSelecione uma categoria:",
+    buttons: [
+      { id: "Infrações leves", title: "Infrações leves" },
+      { id: "Infrações graves", title: "Infrações graves" },
+      { id: "Penalizações e recursos", title: "Penalizações e recursos" },
+      { id: "⬅️ Voltar", title: "⬅️ Voltar" },
+    ],
+  };
 }
 
-// Servir arquivos estáticos
-app.use(express.static(path.join(__dirname)));
+// === CONTEÚDOS ===
+const conteudos = {
+  "Constituição da República":
+    "📘 *Constituição da República de Angola*\nPrincípios fundamentais do Estado, direitos e deveres dos cidadãos, e organização dos poderes públicos.",
+  "Lei da Probidade Pública":
+    "📘 *Lei da Probidade Pública*\nRegula conduta ética e combate à corrupção.",
+  "Lei de Base da Educação":
+    "📘 *Lei de Base da Educação*\nDefine princípios e objetivos do sistema nacional de ensino.",
+  "Lei do Investimento Privado":
+    "📘 *Lei do Investimento Privado*\nRegula investimentos nacionais e estrangeiros.",
+  "Regulamento Académico":
+    "🎓 *Regulamento Académico UNIKIV*\nRegras de frequência, avaliações e conduta dos estudantes.",
+  "Cursos disponíveis":
+    "🎓 *Cursos oferecidos*\nEngenharia Informática, Direito, Economia, Enfermagem, Psicologia, Educação e mais.",
+  "Processos de matrícula":
+    "📝 *Processos de matrícula*\nDocumentos necessários: BI, certificado de habilitações e comprovativo de pagamento.",
+  "Contactos e horários":
+    "📞 *Contactos da Universidade Kimpa Vita*\nEndereço: Uíge, Angola\nAtendimento: 8h às 15h\nEmail: info@unikiv.ao",
+  "Infrações leves":
+    "⚠️ *Infrações leves*\nFaltas leves, atrasos, comportamentos inapropriados.",
+  "Infrações graves":
+    "🚫 *Infrações graves*\nPlágio, agressão, falsificação de documentos.",
+  "Penalizações e recursos":
+    "⚖️ *Penalizações*\nDe advertência até expulsão, com direito a recurso.",
+};
 
-// Página principal
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-
-// Endpoint WhatsApp (Twilio)
-app.post("/whatsapp", async (req, res) => {
+// === Função para gerar resposta com botões interativos ===
+function gerarRespostaWhatsApp(menu) {
   const twiml = new MessagingResponse();
+
+  const message = twiml.message();
+  message.body(menu.text);
+
+  if (menu.buttons && menu.buttons.length > 0) {
+    const interactive = {
+      type: "interactive",
+      interactive: {
+        type: "button",
+        body: { text: menu.text },
+        action: {
+          buttons: menu.buttons.map((b) => ({
+            type: "reply",
+            reply: { id: b.id, title: b.title },
+          })),
+        },
+      },
+    };
+    message.addChild("Message", {}, interactive);
+  }
+
+  return twiml.toString();
+}
+
+// === Endpoint WhatsApp ===
+app.post("/whatsapp", (req, res) => {
+  const from = req.body.From || "anon";
   const message = req.body.Body?.trim() || "";
+  const estado = userContext[from] || "menu";
 
   console.log("📩 Mensagem recebida:", message);
 
   let resposta;
 
-  if (!message) {
-    resposta =
-      "Olá! Envie uma pergunta sobre leis ou sobre a Universidade Kimpa Vita.";
-  } else if (
-    ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite"].includes(
-      message.toLowerCase()
-    )
-  ) {
-    resposta =
-      "👋 Olá! Eu sou a NormAI, assistente jurídica e universitária. Pergunte-me sobre leis angolanas ou regulamentos da Universidade Kimpa Vita!";
-  } else {
-    resposta = await responderPergunta(message);
+  if (message === "⬅️ Voltar" || message === "menu") {
+    userContext[from] = "menu";
+    resposta = menuPrincipal();
+  } else if (estado === "menu") {
+    if (message === "leis") {
+      userContext[from] = "leis";
+      resposta = menuLeis();
+    } else if (message === "universidade") {
+      userContext[from] = "universidade";
+      resposta = menuUniversidade();
+    } else if (message === "infracoes") {
+      userContext[from] = "infracoes";
+      resposta = menuInfracoes();
+    } else {
+      resposta = menuPrincipal();
+    }
+  } else if (estado === "leis" || estado === "universidade" || estado === "infracoes") {
+    if (message === "⬅️ Voltar") {
+      userContext[from] = "menu";
+      resposta = menuPrincipal();
+    } else if (conteudos[message]) {
+      userContext[from] = "submenu";
+      resposta = { text: conteudos[message] + "\n\nClique em '⬅️ Voltar' para voltar ao menu." };
+    } else {
+      resposta = { text: "❓ Opção inválida. Clique em '⬅️ Voltar'." };
+    }
+  } else if (estado === "submenu" && message === "⬅️ Voltar") {
+    userContext[from] = "menu";
+    resposta = menuPrincipal();
   }
 
-  twiml.message(resposta);
+  const xml = gerarRespostaWhatsApp(resposta);
   res.writeHead(200, { "Content-Type": "text/xml" });
-  res.end(twiml.toString());
+  res.end(xml);
 });
 
-// Porta dinâmica (para Render)
+// === Servir index.html e arquivos estáticos ===
+app.use(express.static(path.join(__dirname)));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+// === Servidor ===
 const PORT = process.env.PORT || 1000;
 app.listen(PORT, () =>
-  console.log(`🚀 NormAI com suporte a PDFs ativo na porta ${PORT}`)
+  console.log(`🚀 NormAI com botões interativos ativo no Render na porta ${PORT}`)
 );
