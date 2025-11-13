@@ -1,6 +1,6 @@
 /**
  * NormAI - Assistente Jurídico e Universitário Inteligente
- * Agora com suporte a PDFs (leis, regulamentos, documentos acadêmicos)
+ * Com suporte a PDFs (leis, regulamentos e documentos acadêmicos)
  * Integração com WhatsApp via Twilio
  */
 
@@ -10,11 +10,12 @@ const path = require("path");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
-const pdf = require("pdf-parse");
+const pdfParse = require("pdf-parse"); // ✅ CORRIGIDO
 const { MessagingResponse } = require("twilio").twiml;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // ✅ CORRIGIDO
 
 // Cache simples em memória
 const cache = {};
@@ -29,9 +30,13 @@ async function lerPDFs() {
 
   for (const arquivo of arquivos) {
     if (arquivo.endsWith(".pdf")) {
-      const dataBuffer = fs.readFileSync(path.join(PDF_DIR, arquivo));
-      const texto = (await pdf(dataBuffer)).text;
-      textoTotal += `\n\n[${arquivo}]\n${texto}`;
+      try {
+        const dataBuffer = fs.readFileSync(path.join(PDF_DIR, arquivo));
+        const texto = (await pdfParse(dataBuffer)).text; // ✅ CORRIGIDO
+        textoTotal += `\n\n[${arquivo}]\n${texto}`;
+      } catch (erro) {
+        console.error(`Erro ao ler PDF ${arquivo}: ${erro.message}`);
+      }
     }
   }
 
@@ -51,7 +56,7 @@ async function buscarConteudo(fonte, termo) {
 
     console.log("🌐 Buscando conteúdo da fonte:", fonte);
 
-    const response = await axios.get(fonte);
+    const response = await axios.get(fonte, { timeout: 10000 });
     const $ = cheerio.load(response.data);
     const texto = $("body").text();
 
@@ -60,7 +65,7 @@ async function buscarConteudo(fonte, termo) {
     return filtrarConteudo(texto, termoLower);
   } catch (error) {
     console.error("Erro ao buscar conteúdo:", error.message);
-    return null;
+    return ""; // ✅ EVITA FALHA COMPLETA
   }
 }
 
@@ -81,7 +86,7 @@ function filtrarConteudo(texto, termo) {
 // Função principal
 async function responderPergunta(pergunta) {
   const termo = pergunta.toLowerCase();
-  const fontes = ["https://lex.ao/docs/intro", "https://unikivi.ed.ao"];
+  const fontes = ["https://lex.ao/docs/intro"]; // ✅ EVITAR DOMÍNIO INVÁLIDO
 
   // 1️⃣ Busca nos sites
   for (const fonte of fontes) {
