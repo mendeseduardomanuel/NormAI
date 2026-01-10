@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="style.css">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
 </head>
 <body>
 
@@ -141,41 +144,33 @@
   </section>
 
   <!-- STATS -->
-  <section class="stats_mkeM" aria-labelledby="stats-heading"style="background-color: #6a1a2e;">
-    <div class="container" >
-      <div class="row">
-        <div class="col col--3">
-          <div class="statItem_wck3">
-            <div class="statNumber_hOFA"style=" color: aliceblue;">1000+</div>
-            <div class="statLabel_pnPR"style=" color: aliceblue;">Diplomas Legais</div>
-            <div class="statDescription_vGRm"style=" color: aliceblue;">Acervo completo de legislação angolana</div>
-          </div>
+  <section class="info-container" id="sobre">
+        <div class="blue-box">
+            <h2>SOBRE O JURIS-ANGOLA</h2>
+            <p>Somos a maior biblioteca digital de legislação angolana, focada em democratizar o acesso ao direito.</p>
+            <div class="stats">
+                <div><h1>+1000</h1><p>Diplomas</p></div>
+                <div><h1>+20</h1><p>Entidades</p></div>
+            </div>
         </div>
-        <div class="col col--3">
-          <div class="statItem_wck3">
-            <div class="statNumber_hOFA"style=" color: aliceblue;">20+</div>
-            <div class="statLabel_pnPR"style=" color: aliceblue;">Entidades</div>
-            <div class="statDescription_vGRm"style=" color: aliceblue;">Órgãos e instituições emitentes</div>
-          </div>
-        </div>
-        <div class="col col--3">
-          <div class="statItem_wck3">
-            <div class="statNumber_hOFA"style=" color: aliceblue;">100%</div>
-            <div class="statLabel_pnPR"style=" color: aliceblue;">Gratuito</div>
-            <div class="statDescription_vGRm"style=" color: aliceblue;">Acesso livre e sem custos</div>
-          </div>
-        </div>
-        <div class="col col--3">
-          <div class="statItem_wck3">
-            <div class="statNumber_hOFA"style=" color: aliceblue;">24/7</div>
-            <div class="statLabel_pnPR"style=" color: aliceblue;">Disponível</div>
-            <div class="statDescription_vGRm"style=" color: aliceblue;">Sempre acessível online</div>
-          </div>
-        </div>
-      </div>
+       <div class="white-box">
+    <h2>Sugestões ou Reclamações</h2>
+    <form id="form-reclamacao" action="https://formspree.io/f/mwvpgyww" method="POST">
+        <input type="text" name="nome" placeholder="Nome Completo" required>
+        <input type="email" name="email" placeholder="Email para contato" required>
+        <textarea name="mensagem" rows="4" placeholder="Como podemos ajudar?" required></textarea>
+        <button type="submit" id="btn-enviar">Enviar Mensagem</button>
+    </form>
+</div>
+<div id="modal-sucesso" class="modal-overlay">
+    <div class="modal-content">
+        <i class="fa-solid fa-circle-check"></i>
+        <h3>Exposição Registada</h3>
+        <p>A sua reclamação foi encaminhada diretamente à Direção Principal. Analisaremos os factos com o rigor jurídico necessário.</p>
+        <button onclick="fecharModal()" style="background-color: #6c0e26; color: white;" >Compreendido</button>
     </div>
-  </section>
-
+</div>
+    </section>
   <!-- RECENT UPDATES (ESTILIZADO PARA MOBILE) -->
    <div class="container" >
    <div class="featuresHeader_OstB">
@@ -296,6 +291,38 @@
     });
   </script>
 
+<script>
+  const form = document.getElementById("form-reclamacao");
+const modal = document.getElementById("modal-sucesso");
+const btnEnviar = document.getElementById("btn-enviar");
+
+async function handleSubmit(event) {
+    event.preventDefault();
+    btnEnviar.innerText = "A processar...";
+    btnEnviar.disabled = true;
+    const data = new FormData(event.target);
+    fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: { 'Accept': 'application/json' }
+    }).then(response => {
+        if (response.ok) {
+            modal.style.display = "flex";
+            form.reset();
+            btnEnviar.innerText = "Enviar Mensagem";
+            btnEnviar.disabled = false;
+        } else {
+            alert("Ocorreu um erro técnico. Por favor, tente novamente.");
+        }
+    }).catch(error => {
+        alert("Erro de conexão. Verifique a sua internet.");
+    });
+}
+form.addEventListener("submit", handleSubmit);
+function fecharModal() {
+    modal.style.display = "none";
+}
+</script>
   <!--Diplomas-->
 <!--Diplomas-->
 <!--Diplomas
